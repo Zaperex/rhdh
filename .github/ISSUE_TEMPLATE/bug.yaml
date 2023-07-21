@@ -48,6 +48,6 @@ body:
     attributes:
       label: ' Additional information'
       description: 'Include as many relevant details about the environment you experienced the bug in.'
-      placeholder: '- Which devices are affected? ie Desktop, Table, Phone \n
+      placeholder: "- Which devices are affected? ie Desktop, Table, Phone \n
         - Which browsers are affected? ie Chrome, Firefox, Safari, Edge \n
-        - Which version are you using?'
+        - Which version are you using?"
