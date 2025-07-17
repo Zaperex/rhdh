@@ -146,6 +146,12 @@ RUN echo "=== YARN BUILD ==="; FAILED=0; \
 
 WORKDIR $CONTAINER_SOURCE/dynamic-plugins
 
+RUN echo "=== USER ==="; id; echo "=== USER ==="; whoami
+
+RUN echo "=== DYNAMIC PLUGINS FOLDER CONTENTS ==="; ls -laR .
+
+RUN echo "=== CACHI2 OUTPUT ==="; ls -laR /cachi2
+
 RUN echo "=== DYNAMIC PLUGIN YARN INSTALL ==="; FAILED=0; "$YARN" install --immutable; \
   for d in /tmp/xfs-*; do if [[ -f ${d}/build.log ]]; then \
   (( FAILED = FAILED + 1 )); \
@@ -272,7 +278,7 @@ COPY $EXTERNAL_SOURCE_NESTED/catalog-entities/marketplace /marketplace/catalog-e
 
 # Copy script to gather dynamic plugins; copy embedded dynamic plugins to root folder; fix permissions
 COPY $EXTERNAL_SOURCE_NESTED/docker/install-dynamic-plugins.py $EXTERNAL_SOURCE_NESTED/docker/install-dynamic-plugins.sh ./
-RUN ./install-dynamic-plugins.py; \
+RUN chmod -R a+rx ./install-dynamic-plugins.py; \
   chmod -R a+rx ./install-dynamic-plugins.sh
 
 # The existence of the index.html.tmpl tells Backstage to take that file and load it into memory, inject the needed appConfig (instead of writing
