@@ -225,18 +225,23 @@ runs:
       run: |
         mkdir -p ./rhdh-podman-artifacts
         
-        BUILT_IMAGE="${{ steps.hermetic-build.outputs.image }}:pr-${{ github.event.number }}"
-        BUILT_IMAGE_DIGEST="$BUILT_IMAGE-${{ env.SHORT_SHA }}"
+        # Extract the built image tags from the metadata
+        TAGS_LIST="${{ steps.meta.outputs.tags }}"
         
-        podman save $BUILT_IMAGE $BUILT_IMAGE_DIGEST -o ./rhdh-podman-artifacts/image.tar
+        # Save all the built images to tar (podman save can handle multiple tags)
+        echo "Saving images with tags:"
+        echo "$TAGS_LIST"
         
-        # Save metadata for the push workflow (use the original tags from metadata)
-        echo "${{ steps.meta.outputs.tags }}" > ./rhdh-podman-artifacts/tags.txt
+        # Convert newline-separated tags to space-separated for podman save
+        TAGS_FOR_SAVE=$(echo "$TAGS_LIST" | tr '\n' ' ' | sed 's/[[:space:]]*$//')
+        
+        podman save $TAGS_LIST -o ./rhdh-podman-artifacts/image.tar
+        
+        # Save metadata for the push workflow
+        echo "$TAGS_LIST" > ./rhdh-podman-artifacts/tags.txt
         echo "${{ steps.meta.outputs.labels }}" > ./rhdh-podman-artifacts/labels.txt
         echo "${{ inputs.imageName }}" > ./rhdh-podman-artifacts/imageName.txt
         echo "${{ inputs.registry }}" > ./rhdh-podman-artifacts/registry.txt
-        echo "$BUILT_IMAGE" > ./rhdh-podman-artifacts/builtImage.txt
-        echo "$BUILT_IMAGE_DIGEST" > ./rhdh-podman-artifacts/builtImageDigest.txt
 
     - name: Upload image artifact
       if: ${{ inputs.enableHermeticBuild == 'true' }}
