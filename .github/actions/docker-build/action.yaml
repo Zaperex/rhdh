@@ -152,6 +152,18 @@ runs:
 
           echo LOCAL_CACHE_DIR_REALPATH=$(realpath "${{ env.LOCAL_CACHE_DIR }}") >> $GITHUB_ENV
 
+    - name: "Fix Cache Ownership for Non-Root Buildah"
+      if: ${{ inputs.enableHermeticBuild == 'true' }}
+      shell: bash
+      run: |
+        set -ex
+        echo "=== Before ownership fix ==="
+        ls -l ${{ env.LOCAL_CACHE_DIR_REALPATH }}
+        echo "=== Attempting to fix ownership to runner user ==="
+        sudo chown -R runner ${{ env.LOCAL_CACHE_DIR_REALPATH }}
+        echo "=== After ownership fix ==="
+        ls -l ${{ env.LOCAL_CACHE_DIR_REALPATH }}
+        
     - name: Transform Containerfile for hermetic build
       if: ${{ inputs.enableHermeticBuild == 'true' }}
       shell: bash
