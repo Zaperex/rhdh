@@ -232,9 +232,6 @@ runs:
         echo "Saving images with tags:"
         echo "$TAGS_LIST"
         
-        # Convert newline-separated tags to space-separated for podman save
-        TAGS_FOR_SAVE=$(echo "$TAGS_LIST" | tr '\n' ' ' | sed 's/[[:space:]]*$//')
-        
         podman save $TAGS_LIST -o ./rhdh-podman-artifacts/image.tar
         
         # Save metadata for the push workflow
@@ -247,7 +244,7 @@ runs:
       if: ${{ inputs.enableHermeticBuild == 'true' }}
       uses: actions/upload-artifact@v4
       with:
-        name: podman-image-${{ github.event.number || github.ref_name || 'main' }}-${{ env.SHORT_SHA }}
+        name: podman-image-${{ github.event.number || 'main' }}-${{ env.SHORT_SHA }}
         path: ./rhdh-podman-artifacts/
         retention-days: 1
         if-no-files-found: error
