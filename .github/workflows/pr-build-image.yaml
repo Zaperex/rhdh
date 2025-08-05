@@ -25,7 +25,7 @@ concurrency:
 
 env:
   REGISTRY: quay.io
-  IMAGE_NAME: rhdh-community/rhdh
+  IMAGE_NAME: my-test-organization/test-registry
 
 jobs:
   build-image:
