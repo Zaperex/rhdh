@@ -32,7 +32,15 @@ concurrency:
 jobs:
   check-commit-author:
     runs-on: ubuntu-latest
+    outputs:
+      is_team_member: ${{ steps.team-check.outputs.is_team_member }}
     steps:   
+      - name: Checkout main branch for security
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          fetch-depth: 1
+          ref: main  # Always use main branch for security-critical action
+        
       - name: Check if commit author is in the rhdh team
         id: team-check
         uses: ./.github/actions/check-author
