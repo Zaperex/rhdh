@@ -75,6 +75,9 @@ backend.add(
                 logger.info(
                   `Resolved '${searchedPackageName}' at ${resolvedPath}`,
                 );
+                logger.debug(
+                  `Test`,
+                );
                 return resolvedPath;
               } catch (e) {
                 this.logger.error(
