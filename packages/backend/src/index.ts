@@ -72,11 +72,8 @@ backend.add(
                     paths: [searchPath],
                   },
                 );
-                logger.info(
-                  `Resolved '${searchedPackageName}' at ${resolvedPath}`,
-                );
                 logger.debug(
-                  `Test`,
+                  `Resolved '${searchedPackageName}' at ${resolvedPath}`,
                 );
                 return resolvedPath;
               } catch (e) {
