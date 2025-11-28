@@ -45,7 +45,7 @@
       }
     },   
     {
-      "description": "Dockerfile non-major updates", 
+      "description": "Disable Dockerfile non-major updates", 
       "matchDatasources": [
         "docker"
       ],
@@ -54,12 +54,11 @@
         "minor"
       ],      
       "matchFileNames": [
-        ".rhdh/docker/Dockerfile",
-        "docker/Dockerfile"
+        "docker/Containerfile"
       ],        
       "additionalBranchPrefix": "dockerfile ",        
       "groupName": "Dockerfile images (non-major) [skip-build]",
-      "automerge": true
+      "enabled": false
     },  
     {
       "description": "Test Dockerfile non-major updates", 
