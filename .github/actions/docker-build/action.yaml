@@ -72,7 +72,8 @@ runs:
         COMPONENT_DIR: ${{ inputs.componentDirectory }}
       run: |
         echo "HERMETO_IMAGE=quay.io/konflux-ci/hermeto:latest" >> $GITHUB_ENV
-        echo "LOCAL_CACHE_DIR=./hermeto-cache/$(basename "$COMPONENT_DIR")" >> $GITHUB_ENV
+        mkdir -p "./hermeto-cache/$(basename "$COMPONENT_DIR")"
+        echo "LOCAL_CACHE_DIR=$(realpath "./hermeto-cache/$(basename "$COMPONENT_DIR")")" >> $GITHUB_ENV
         echo "COMPONENT_ABS_DIR=${GITHUB_WORKSPACE}/${COMPONENT_DIR}" >> $GITHUB_ENV
 
     - name: Restore hermeto cache
@@ -128,7 +129,6 @@ runs:
           echo "No output directory found, skipping inject-files"
           exit 1
         fi
-        echo LOCAL_CACHE_DIR_REALPATH=$(realpath "${{ env.LOCAL_CACHE_DIR }}") >> $GITHUB_ENV
     - name: Save hermeto cache
       uses: actions/cache/save@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
       if: ${{ steps.restore-hermeto-cache.outputs.cache-hit != 'true' }}
@@ -143,13 +143,13 @@ runs:
         echo "::group::Fixing cache ownership"
 
         echo "=== Before ownership fix ==="
-        ls -l ${{ env.LOCAL_CACHE_DIR_REALPATH }}
+        ls -l ${{ env.LOCAL_CACHE_DIR }}
 
         echo "=== Attempting to fix ownership to runner user ==="
-        sudo chown -R runner ${{ env.LOCAL_CACHE_DIR_REALPATH }}
+        sudo chown -R runner ${{ env.LOCAL_CACHE_DIR }}
         
         echo "=== After ownership fix ==="
-        ls -l ${{ env.LOCAL_CACHE_DIR_REALPATH }}
+        ls -l ${{ env.LOCAL_CACHE_DIR }}
 
         echo "::endgroup::"
         
@@ -188,7 +188,7 @@ runs:
         labels: ${{ steps.meta.outputs.labels }}
         extra-args: |
           --network=none
-          --volume ${{ env.LOCAL_CACHE_DIR_REALPATH }}:/cachi2:z
+          --volume ${{ env.LOCAL_CACHE_DIR }}:/cachi2:z
 
     - name: Save image as artifact
       if: ${{ inputs.skipArtifactUpload != 'true' }}
