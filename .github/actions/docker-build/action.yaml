@@ -76,6 +76,7 @@ runs:
         echo "COMPONENT_ABS_DIR=${GITHUB_WORKSPACE}/${COMPONENT_DIR}" >> $GITHUB_ENV
 
     - name: Restore hermeto cache
+      id: restore-hermeto-cache
       uses: actions/cache/restore@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
       with:
         path: ${{ env.LOCAL_CACHE_DIR }}
@@ -83,57 +84,54 @@ runs:
     
     - name: Cache dependencies with hermeto
       shell: bash
+      if: ${{ steps.restore-hermeto-cache.outputs.cache-hit != 'true' }}
       run: |        
         set -ex
-        if [ -d ${{ env.LOCAL_CACHE_DIR }} ]; then
-          echo "::group::Restoring cached hermeto cache"
-          echo "::endgroup::"
-        else
-          echo "::group::Creating new hermeto cache"
-          mkdir -p ${{ env.LOCAL_CACHE_DIR }} || echo "Failed to create local cache directory"
-          echo "::endgroup::"
+        echo "::group::Creating new hermeto cache"
+        mkdir -p ${{ env.LOCAL_CACHE_DIR }} || echo "Failed to create local cache directory"
+        echo "::endgroup::"
 
-          echo "::group::Fetching dependencies with hermeto"
-          # Build hermeto cache for rpm, yarn, and pip
+        echo "::group::Fetching dependencies with hermeto"
+        # Build hermeto cache for rpm, yarn, and pip
+        podman run --rm -v "$PWD:/source:z" -v "$LOCAL_CACHE_DIR:/cachi2:z" -w /source "$HERMETO_IMAGE" \
+          --log-level DEBUG \
+          fetch-deps --dev-package-managers \
+          --source . \
+          --output /cachi2/output \
+          '[{"type": "rpm", "path": "."}, {"type": "yarn","path": "."}, {"type": "yarn","path": "./dynamic-plugins"}, {"type": "pip","path": "./python", "allow_binary": "false"}]'  || echo "Fetch-deps failed"
+        echo "::endgroup::"
+        
+        if [ -d ${{ env.LOCAL_CACHE_DIR }}/output ]; then
+          echo "::group::Generating environment file"
+          
+          # Generate environment file
           podman run --rm -v "$PWD:/source:z" -v "$LOCAL_CACHE_DIR:/cachi2:z" -w /source "$HERMETO_IMAGE" \
-            --log-level DEBUG \
-            fetch-deps --dev-package-managers \
-            --source . \
-            --output /cachi2/output \
-            '[{"type": "rpm", "path": "."}, {"type": "yarn","path": "."}, {"type": "yarn","path": "./dynamic-plugins"}, {"type": "pip","path": "./python", "allow_binary": "false"}]'  || echo "Fetch-deps failed"
+                      --log-level DEBUG \
+                      generate-env --format env \
+                      --output /cachi2/cachi2.env /cachi2/output
           echo "::endgroup::"
           
-          if [ -d ${{ env.LOCAL_CACHE_DIR }}/output ]; then
-            echo "::group::Generating environment file"
-            
-            # Generate environment file
-            podman run --rm -v "$PWD:/source:z" -v "$LOCAL_CACHE_DIR:/cachi2:z" -w /source "$HERMETO_IMAGE" \
-                        --log-level DEBUG \
-                        generate-env --format env \
-                        --output /cachi2/cachi2.env /cachi2/output
-            echo "::endgroup::"
-            
-          else
-            echo "No output directory found, skipping generate-env"
-            exit 1
-          fi
+        else
+          echo "No output directory found, skipping generate-env"
+          exit 1
+        fi
 
-          if [ -d ${{ env.LOCAL_CACHE_DIR }}/output ]; then
-            echo "::group::Injecting files"
-            
-            podman run --rm -v "$PWD:/source:z" -v "$LOCAL_CACHE_DIR:/cachi2:z" -w /source "$HERMETO_IMAGE" \
-              --log-level DEBUG \
-              inject-files /cachi2/output || echo "Inject-files failed"
-            echo "::endgroup::"
+        if [ -d ${{ env.LOCAL_CACHE_DIR }}/output ]; then
+          echo "::group::Injecting files"
+          
+          podman run --rm -v "$PWD:/source:z" -v "$LOCAL_CACHE_DIR:/cachi2:z" -w /source "$HERMETO_IMAGE" \
+            --log-level DEBUG \
+            inject-files /cachi2/output || echo "Inject-files failed"
+          echo "::endgroup::"
 
-          else
-            echo "No output directory found, skipping inject-files"
-            exit 1
-          fi
+        else
+          echo "No output directory found, skipping inject-files"
+          exit 1
         fi
         echo LOCAL_CACHE_DIR_REALPATH=$(realpath "${{ env.LOCAL_CACHE_DIR }}") >> $GITHUB_ENV
     - name: Save hermeto cache
       uses: actions/cache/save@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
+      if: ${{ steps.restore-hermeto-cache.outputs.cache-hit != 'true' }}
       with:
         path: ${{ env.LOCAL_CACHE_DIR }}
         key: hermeto-cache-${{ inputs.platform }}-${{ hashFiles('yarn.lock', 'dynamic-plugins/yarn.lock', 'rpms.lock.yaml', 'python/requirements.in', 'python/requirements-build.in') }}
