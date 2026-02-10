@@ -19,6 +19,7 @@ FROM registry.access.redhat.com/ubi9/nodejs-22:9.7-1770309564@sha256:be024784db8
 # hadolint ignore=DL3002
 USER 0
 
+RUN exit 1
 # Install isolated-vm dependencies
 # hadolint ignore=DL3041
 RUN dnf install -q -y --allowerasing --nobest \
