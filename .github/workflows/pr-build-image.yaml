@@ -90,3 +90,4 @@ jobs:
             pr-${{ github.event.number }}-${{ env.SHORT_SHA }}
           imageLabels: quay.expires-after=14d
           platform: linux/amd64
+          skipArtifactUpload: 'true'
