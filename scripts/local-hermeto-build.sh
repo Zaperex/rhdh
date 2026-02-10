@@ -167,11 +167,11 @@ build_cache() {
   mkdir -p "${local_cache_output_dir}"
 
   # Ensure the latest hermeto image
-  podman pull "${platform_args}" "${HERMETO_IMAGE}"
+  podman pull ${platform_args} "${HERMETO_IMAGE}"
 
   # Build cache
   podman run --rm -ti \
-    "${platform_args}" \
+    ${platform_args} \
     -v "${PWD}:/source:z" \
     -v "${local_cache_dir}:/cachi2:z" \
     -w /source \
@@ -183,7 +183,7 @@ build_cache() {
     '[{"type": "rpm", "path": "."}, {"type": "yarn","path": "."}, {"type": "yarn","path": "./dynamic-plugins"}, {"type": "pip","path": "./python", "allow_binary": "false"}]'
 
   podman run --rm -ti \
-    "${platform_args}" \
+    ${platform_args} \
     -v "${PWD}:/source:z" \
     -v "${local_cache_dir}:/cachi2:z" \
     -w /source \
@@ -191,7 +191,7 @@ build_cache() {
     generate-env --format env --output /cachi2/cachi2.env /cachi2/output
 
   podman run --rm -ti \
-    "${platform_args}" \
+    ${platform_args} \
     -v "${PWD}:/source:z" \
     -v "${local_cache_dir}:/cachi2:z" \
     -w /source \
@@ -239,19 +239,18 @@ build_image() {
   # /run/secrets/rhsm, /run/secrets/etc-pki-entitlement) which enables RHEL repos
   # not in the hermeto cache. With --network none, dnf/microdnf fails trying to
   # access these repos. Mount empty paths over these secrets to block injection.
-  local empty_dir
-  empty_dir=$(mktemp -d)
-  trap 'rm -rf "${empty_dir}"' EXIT
+  EMPTY_DIR=$(mktemp -d)
+  trap 'rm -rf "${EMPTY_DIR}"' EXIT
 
   podman build -t "${image}" \
-    "${platform_args}" \
+    ${platform_args} \
     --network none \
     --no-cache \
     -f "${component_dir}/docker/Containerfile.hermeto" \
     -v "${local_cache_dir}:/cachi2" \
     -v /dev/null:/run/secrets/redhat.repo \
-    -v "${empty_dir}:/run/secrets/rhsm:z" \
-    -v "${empty_dir}:/run/secrets/etc-pki-entitlement:z" \
+    -v "${EMPTY_DIR}:/run/secrets/rhsm:z" \
+    -v "${EMPTY_DIR}:/run/secrets/etc-pki-entitlement:z" \
     "${component_dir}"
 }
 
