@@ -72,7 +72,8 @@ jobs:
               echo "Commit Tag: pr-$PR_NUMBER-$SHORT_SHA"
 
       - name: Get the latest commits from base branch
-        if: ${{ steps.check-image.outputs.is_skipped != 'true' }}        run: |
+        if: ${{ steps.check-image.outputs.is_skipped != 'true' }}        
+        run: |
           git remote add base-origin https://github.com/"$GITHUB_REPOSITORY" || true
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
