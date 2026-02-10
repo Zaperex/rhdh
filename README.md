@@ -51,7 +51,7 @@ Our current list of plugins include:
 Dependencies:
 
 - [Node.js](https://nodejs.org/en/) - [required version](.nvmrc)
-- [yarn](https://classic.yarnpkg.com/en/docs/install#debian-stable) - [required version](.yarnrc.yml)
+- [corepack](https://github.com/nodejs/corepack)
 
 Information on running RHDH can be found in our [Getting Started](https://github.com/redhat-developer/rhdh/blob/main/docs/index.md) documentation. In the documentation is how to set up and run an instance locally. We plan to expand upon the documentation at a later point if there is enough interest in other methods for getting the app up and running.
 
@@ -75,14 +75,10 @@ Want to know more about Backstage, consult the [documentation](https://backstage
 
 RHDH is currently only available for amd64/x86_64.
 
-For additional architecture support, please vote for https://issues.redhat.com/browse/RHIDP-1351 with your reason for needing additional arches.
+For additional architecture support, please vote for <https://issues.redhat.com/browse/RHIDP-1351> with your reason for needing additional arches.
 
 If you want an image that runs on Mac M1 (arm64/aarch64) or another architecture, you will need to build it yourself.
 
 ### Building locally
 
-Check out this repo, choose the branch or tag you want to use, then build an image:
-
-```
-podman build -f docker/Dockerfile . -t rhdh:local
-```
+Refer to the [Containerfile documentation](docker/README.adoc) for details on building locally
