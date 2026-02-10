@@ -72,7 +72,7 @@ jobs:
               echo "Commit Tag: pr-$PR_NUMBER-$SHORT_SHA"
 
       - name: Get the latest commits from base branch
-        if: ${{ steps.check-image.outputs.is_skipped != 'true' }}
+        if: false
         run: |
           git remote add base-origin https://github.com/"$GITHUB_REPOSITORY" || true
           git config user.name "github-actions[bot]"
@@ -90,4 +90,3 @@ jobs:
             pr-${{ github.event.number }}-${{ env.SHORT_SHA }}
           imageLabels: quay.expires-after=14d
           platform: linux/amd64
-          skipArtifactUpload: 'true'
