@@ -42,8 +42,8 @@ plugins:
   # disabled: true
   - package: ./dynamic-plugins/dist/backstage-community-plugin-scaffolder-backend-module-regex-dynamic
     disabled: false
-  # - package: oci://registry.access.redhat.com/rhdh/backstage-plugin-techdocs@sha256:44060db142001d1a6cbfcb7eb90daa0a7c07c492cc2693c0c9a5d8645fbe64f4
-  # Tag: 1.10.0--1.16.0, Build date: 2026-01-29T15:44:15Z
+  # - package: oci://registry.access.redhat.com/rhdh/backstage-plugin-techdocs@sha256:f568c8bd08fcc0826e983a162af8bc21b75dabdea93eee7a5ed00c7539528b63
+  # Tag: 1.10.0--1.16.0, Build date: 2026-02-26T01:44:01Z
   # new approach using oci images: to switch to the new approach, uncommment
   # the 'package' line above and remove the next two lines, keeping the pluginConfig.
   # disabled: true
@@ -174,8 +174,8 @@ plugins:
           red-hat-developer-hub.backstage-plugin-analytics-module-adoption-insights:
             analyticsApiExtensions:
               - importName: AdoptionInsightsAnalyticsApi
-  # - package: oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-catalog-backend-module-extensions@sha256:66c212aa13ef5eaf47cadb1662a0917a8eb5633fca9923b69ed324767d4007f3
-  # Tag: 1.10.0--0.14.3, Build date: 2026-01-30T20:21:29Z
+  # - package: oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-catalog-backend-module-extensions@sha256:18043363187a8d4787c88f01ec48d53a7e36d7ab2eb2be460e13bad3b286c3a9
+  # Tag: 1.10.0--0.14.3, Build date: 2026-02-24T15:58:27Z
   # new approach using oci images: to switch to the new approach, uncommment
   # the 'package' line above and remove the next two lines, keeping the pluginConfig.
   # disabled: true
@@ -344,8 +344,8 @@ plugins:
             translationResources:
               - importName: homepageTranslations
                 ref: homepageTranslationRef
-  # - package: oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-extensions@sha256:71d6cfd7f31ebf4ae9ce589df94f549b69dcfbf2a3ab65837558503e84575d61
-  # Tag: 1.10.0--0.14.3, Build date: 2026-01-30T20:21:56Z
+  # - package: oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-extensions@sha256:845c2e233e9c7957f55af7b38d6505fee5dc6019c70a8c71968a21f981b1014d
+  # Tag: 1.10.0--0.14.3, Build date: 2026-02-24T15:58:47Z
   # new approach using oci images: to switch to the new approach, uncommment
   # the 'package' line above and remove the next two lines, keeping the pluginConfig.
   # disabled: true
@@ -372,8 +372,8 @@ plugins:
             menuItems:
               extensions:
                 parent: default.admin
-  # - package: oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-extensions-backend@sha256:156e6b981d5c886146571c8bd55a05eabcd8819f1c40c1675dae65165f16d8fa
-  # Tag: 1.10.0--0.14.3, Build date: 2026-01-30T20:23:47Z
+  # - package: oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-extensions-backend@sha256:600f57997158c72491fb4428951a806a5489681a0b0c848d43ac26c35d9866cb
+  # Tag: 1.10.0--0.14.3, Build date: 2026-02-24T15:58:33Z
   # new approach using oci images: to switch to the new approach, uncommment
   # the 'package' line above and remove the next two lines, keeping the pluginConfig.
   # disabled: true
@@ -786,8 +786,8 @@ plugins:
               rbac:
                 parent: default.admin
                 icon: rbacIcon
-  # - package: oci://registry.access.redhat.com/rhdh/backstage-community-plugin-scaffolder-backend-module-kubernetes@sha256:8c8a6f1f110b39f6819217387aa21dc86a3e41878b91f8239814527553031da1
-  # Tag: 1.10.0--2.13.0, Build date: 2026-01-30T19:30:18Z
+  # - package: oci://registry.access.redhat.com/rhdh/backstage-community-plugin-scaffolder-backend-module-kubernetes@sha256:9aed0ce60bd34ac5742ec354ce48c11dce6b49f7d4760340fba50c7134778fb8
+  # Tag: 1.10.0--2.13.0, Build date: 2026-02-24T15:59:31Z
   # new approach using oci images: to switch to the new approach, uncommment
   # the 'package' line above and remove the next two lines, keeping the pluginConfig.
   # disabled: true
@@ -1728,7 +1728,6 @@ plugins:
         baseUrl: ${SERVICENOW_BASE_URL}
         username: ${SERVICENOW_USERNAME}
         password: ${SERVICENOW_PASSWORD}
-  # Tag: 1.10.0--1.0.0, Build date: 2026-01-29T15:52:02Z
   - package: oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator-backend-module-loki@sha256:779f888d47a9b87ad81a13897e171fe4a6a67498a937d7560026dd081361a3b2
     disabled: true
     pluginConfig:
@@ -1736,21 +1735,18 @@ plugins:
         workflowLogProvider:
           loki:
             baseUrl: ${LOKI_BASE_URL}
-  # Tag: 1.10.0--8.6.0, Build date: 2026-01-29T16:13:22Z
   - package: oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator-backend@sha256:7c54719a054a06bfc2715576fa520de5be1cfea93fecb4c03436f837631c7c5e
     disabled: true
     pluginConfig:
       orchestrator:
         dataIndexService:
           url: http://sonataflow-platform-data-index-service
-  # Tag: 1.10.0--1.6.1, Build date: 2026-01-29T16:08:58Z
   - package: oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator-form-widgets@sha256:06ad37be6aa31328d0e1e6a3b83a81a6428c2033b3317d23ad1fd964865f79fe
     disabled: true
     pluginConfig:
       dynamicPlugins:
         frontend:
           red-hat-developer-hub.backstage-plugin-orchestrator-form-widgets: {}
-  # Tag: 1.10.0--5.4.0, Build date: 2026-01-29T16:08:22Z
   - package: oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator@sha256:03052706c1e59d1cbb634a80c5fb236417148657320265dd0ed59988b3bb9307
     disabled: true
     pluginConfig:
@@ -1781,7 +1777,6 @@ plugins:
                     if:
                       anyOf:
                         - IsOrchestratorCatalogTabAvailable
-  # Tag: 1.10.0--1.3.2, Build date: 2026-01-29T16:21:53Z
   - package: oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-scaffolder-backend-module-orchestrator@sha256:35e88943f01173f4edac4bb6641c065760b1f5718dc70277450e85f2db647ffc
     disabled: true
     pluginConfig:
